@@ -2,13 +2,13 @@
 
 Notebooks de Pluto para la vida laboral colombiana.
 
-## `salario.jl`
+## salario.jl
 Cálculo de los descuentos y deducciones de nómina aplicables a un salario en Colombia.
 
 ## TODO
 
-- `renta.jl`
-- `stocks.jl`
+- renta.jl
+- stocks.jl
 
 ----
 
