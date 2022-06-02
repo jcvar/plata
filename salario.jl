@@ -26,9 +26,9 @@ end;
 
 # ╔═╡ 8e90c851-1aad-490b-b8f0-7ef60b15d111
 begin
-	salario        = 5_000_000
-	no_salarial    = 1_000_000
-	días_laborados = 30
+	salario     = 5_000_000
+	no_salarial = 1_000_000
+	días_labor  = 30
 end;
 
 # ╔═╡ 2f935690-654c-46ce-aa80-6503069e1a19
@@ -116,17 +116,18 @@ uvt(pesos) = pesos / UVT; # Convierte pesos a UVT
 
 # ╔═╡ 135a870d-655b-46c3-86f6-fbcc75e5267b
 """
-Calcula la retención en la fuente en pesos de acuerdo a la base de retención en pesos.
+Calcula la retención en la fuente en pesos de acuerdo a la base de retención en pesos y el número de días laborados.
 """
-function retencion_fuente(base)
+function retencion_fuente(base, d)
 	rango   = [2300,  945,  640,  360,  150,   95, 0]
 	tasa    = [0.39, 0.37, 0.35, 0.33, 0.28, 0.19, 0]
 	uvt_add = [ 770,  268,  162,   69,   10,    0, 0]
 
-	base_uvt = uvt(base)
+	base_uvt = uvt(base) * (30 / d)
 	for (r, t, u) in zip(rango, tasa, uvt_add)
 		if base_uvt > r
-			return pesos((base_uvt - r) * t + u)
+			ret_uvt = ((base_uvt - r) * t + u) * (d / 30)
+			return pesos(ret_uvt)
 		end
 	end
 end;
