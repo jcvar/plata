@@ -28,7 +28,7 @@ end;
 begin
 	salario     = 5_000_000
 	no_salarial = 1_000_000
-	días_labor  = 30
+	dias_labor  = 30
 end;
 
 # ╔═╡ 2f935690-654c-46ce-aa80-6503069e1a19
@@ -64,9 +64,7 @@ no salariales del mes, hasta un máximo de 25 SMMLV.
 Ley 1393 de 2010, Artículo 30
 Ley 100 de 1993, Artículo 18
 """
-function ibc(s, ns)
-	min(max(s, (s+ns)*0.6), 25*SMMLV)
-end;
+ibc(s, ns) = min(max(s, 0.6 * (s + ns)), 25 * SMMLV);
 
 # ╔═╡ fda958ff-77b5-4849-ad02-84bbaa5badf2
 md"
@@ -94,15 +92,18 @@ Una vez se ha calculado la base de retención, se toma su valor en UVT y se calc
 |  >640 |         945 |             35% | (Ingreso laboral gravado expresado en UVT menos 640 UVT)*35% más 162 UVT  |
 |  >945 |        2300 |             37% | (Ingreso laboral gravado expresado en UVT menos 945 UVT)*37% más 268 UVT  |
 | >2300 | En adelante |             39% | (Ingreso laboral gravado expresado en UVT menos 2300 UVT)*39% más 770 UVT |
+
+Se redondea a miles pesos.
 "
 
 # ╔═╡ 7854379f-602d-43e5-b4f4-02357028b139
 """
 Calcula la base de retención en la fuente
 """
-function base_retencion(pagos, no_renta, renta_exenta, deducciones)
-	gravable = pagos - no_renta
-	0.75 * (gravable - min(renta_exenta+deducciones, 0.4 * gravable))
+function base_retencion(pagos, no_renta, renta_exenta = 0, deducciones = 0)
+	gravable   = pagos - no_renta
+	descuentos = renta_exenta + deducciones
+	gravable - min(descuentos + 0.25 * (gravable - descuentos), 0.4 * gravable)
 end;
 
 # ╔═╡ 361a4751-abd5-4c77-b514-dd8a13ebb50a
@@ -118,7 +119,7 @@ uvt(pesos) = pesos / UVT; # Convierte pesos a UVT
 """
 Calcula la retención en la fuente en pesos de acuerdo a la base de retención en pesos y el número de días laborados.
 """
-function retencion_fuente(base, d)
+function retencion_fuente(base, d=30)
 	rango   = [2300,  945,  640,  360,  150,   95, 0]
 	tasa    = [0.39, 0.37, 0.35, 0.33, 0.28, 0.19, 0]
 	uvt_add = [ 770,  268,  162,   69,   10,    0, 0]
@@ -127,7 +128,7 @@ function retencion_fuente(base, d)
 	for (r, t, u) in zip(rango, tasa, uvt_add)
 		if base_uvt > r
 			ret_uvt = ((base_uvt - r) * t + u) * (d / 30)
-			return pesos(ret_uvt)
+			return round(pesos(ret_uvt), digits= -3)
 		end
 	end
 end;
@@ -176,20 +177,13 @@ function seguridad_social(ibc)
 	(sum(seguridad), seguridad)
 end;
 
-# ╔═╡ 00000000-0000-0000-0000-000000000001
-PLUTO_PROJECT_TOML_CONTENTS = """
-[deps]
-"""
-
-# ╔═╡ 00000000-0000-0000-0000-000000000002
-PLUTO_MANIFEST_TOML_CONTENTS = """
-# This file is machine-generated - editing it directly is not advised
-
-julia_version = "1.7.3"
-manifest_format = "2.0"
-
-[deps]
-"""
+# ╔═╡ 4c2ca152-451e-47c4-9009-79f8067c6553
+begin
+	p  = salario + no_salarial
+	nr = seguridad_social(ibc(salario, no_salarial))[1]
+	rf = retencion_fuente(base_retencion(p, nr), dias_labor)
+	(p, nr+rf)
+end
 
 # ╔═╡ Cell order:
 # ╟─e7ba903c-2752-4832-b69a-c93de0dd47ac
@@ -197,6 +191,7 @@ manifest_format = "2.0"
 # ╟─164c89b1-5284-401e-af21-103dade48b20
 # ╠═32e16538-5cf0-4e06-85d7-b7a72841e5e3
 # ╠═8e90c851-1aad-490b-b8f0-7ef60b15d111
+# ╠═4c2ca152-451e-47c4-9009-79f8067c6553
 # ╠═2f935690-654c-46ce-aa80-6503069e1a19
 # ╠═482e1467-3d98-49dc-94f9-15b52a8d30a8
 # ╠═eee16024-c06c-4b79-9413-3542281079a2
@@ -207,5 +202,3 @@ manifest_format = "2.0"
 # ╠═202de137-96d9-4a01-b830-ec09b39d25e1
 # ╠═bc1870e1-78dd-4c1c-b145-e99a88065a22
 # ╠═51f742eb-d95e-4b23-b188-c3648e12bf65
-# ╟─00000000-0000-0000-0000-000000000001
-# ╟─00000000-0000-0000-0000-000000000002
