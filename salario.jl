@@ -20,7 +20,8 @@ md"## Definiciones y Parámetros"
 
 # ╔═╡ 32e16538-5cf0-4e06-85d7-b7a72841e5e3
 begin
-	const UVT = 38_004
+	# const UVT = 36_308 # 2021
+	const UVT = 38_004 # 2022
 	const SMMLV = 1_000_000
 end;
 
@@ -28,6 +29,8 @@ end;
 begin
 	salario     = 5_000_000
 	no_salarial = 1_000_000
+	exento      = 0
+	deduccion   = 0
 	dias_labor  = 30
 end;
 
@@ -39,6 +42,9 @@ struct Nomina
 	salud::Int
 	pensión::Int
 	solidaridad::Int
+	devengado::Int
+	descuento::Int
+	total::Int
 end
 
 # ╔═╡ 2f935690-654c-46ce-aa80-6503069e1a19
@@ -187,14 +193,32 @@ function seguridad_social(ibc)
 	(sum(seguridad), seguridad)
 end;
 
-# ╔═╡ 4c2ca152-451e-47c4-9009-79f8067c6553
+# ╔═╡ ef1ff529-7cfc-4086-8ad7-f5cfbecf7603
 begin
 	sm = salario*(dias_labor/30)
 	ss = seguridad_social(ibc(sm, no_salarial))
-	rf = retencion_fuente(base_retencion(sm, ss[1]), dias_labor)
 
-	Nomina(salario, no_salarial, rf, ss[2]...)
+	dev = sm + no_salarial
+	rf = retencion_fuente(base_retencion(dev, ss[1], exento, deduccion), dias_labor)
+	des = rf + round(ss[1]) + deduccion
+
+	Nomina(sm, no_salarial, rf, round.(ss[2])..., dev, des, dev - des)
 end
+
+# ╔═╡ 00000000-0000-0000-0000-000000000001
+PLUTO_PROJECT_TOML_CONTENTS = """
+[deps]
+"""
+
+# ╔═╡ 00000000-0000-0000-0000-000000000002
+PLUTO_MANIFEST_TOML_CONTENTS = """
+# This file is machine-generated - editing it directly is not advised
+
+julia_version = "1.7.3"
+manifest_format = "2.0"
+
+[deps]
+"""
 
 # ╔═╡ Cell order:
 # ╟─e7ba903c-2752-4832-b69a-c93de0dd47ac
@@ -203,7 +227,7 @@ end
 # ╠═32e16538-5cf0-4e06-85d7-b7a72841e5e3
 # ╠═8e90c851-1aad-490b-b8f0-7ef60b15d111
 # ╠═ef5973cc-acad-4b0c-9311-8f5afc29fad6
-# ╠═4c2ca152-451e-47c4-9009-79f8067c6553
+# ╠═ef1ff529-7cfc-4086-8ad7-f5cfbecf7603
 # ╠═2f935690-654c-46ce-aa80-6503069e1a19
 # ╠═482e1467-3d98-49dc-94f9-15b52a8d30a8
 # ╠═eee16024-c06c-4b79-9413-3542281079a2
@@ -214,3 +238,5 @@ end
 # ╠═202de137-96d9-4a01-b830-ec09b39d25e1
 # ╠═bc1870e1-78dd-4c1c-b145-e99a88065a22
 # ╠═51f742eb-d95e-4b23-b188-c3648e12bf65
+# ╟─00000000-0000-0000-0000-000000000001
+# ╟─00000000-0000-0000-0000-000000000002
