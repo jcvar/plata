@@ -31,6 +31,16 @@ begin
 	dias_labor  = 30
 end;
 
+# ╔═╡ ef5973cc-acad-4b0c-9311-8f5afc29fad6
+struct Nomina
+	salario::Int
+	no_salarial::Int
+	retefuente::Int
+	salud::Int
+	pensión::Int
+	solidaridad::Int
+end
+
 # ╔═╡ 2f935690-654c-46ce-aa80-6503069e1a19
 md"## Seguridad social
 Un trabajador debe estar afiliado al sistema de salud y al sistema de pensiones.
@@ -179,10 +189,11 @@ end;
 
 # ╔═╡ 4c2ca152-451e-47c4-9009-79f8067c6553
 begin
-	p  = salario + no_salarial
-	nr = seguridad_social(ibc(salario, no_salarial))[1]
-	rf = retencion_fuente(base_retencion(p, nr), dias_labor)
-	(p, nr+rf)
+	sm = salario*(dias_labor/30)
+	ss = seguridad_social(ibc(sm, no_salarial))
+	rf = retencion_fuente(base_retencion(sm, ss[1]), dias_labor)
+
+	Nomina(salario, no_salarial, rf, ss[2]...)
 end
 
 # ╔═╡ Cell order:
@@ -191,6 +202,7 @@ end
 # ╟─164c89b1-5284-401e-af21-103dade48b20
 # ╠═32e16538-5cf0-4e06-85d7-b7a72841e5e3
 # ╠═8e90c851-1aad-490b-b8f0-7ef60b15d111
+# ╠═ef5973cc-acad-4b0c-9311-8f5afc29fad6
 # ╠═4c2ca152-451e-47c4-9009-79f8067c6553
 # ╠═2f935690-654c-46ce-aa80-6503069e1a19
 # ╠═482e1467-3d98-49dc-94f9-15b52a8d30a8
