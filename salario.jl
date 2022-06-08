@@ -125,6 +125,11 @@ function base_retencion(pagos, no_renta, renta_exenta = 0, deducciones = 0)
 	gravable - min(descuentos + 0.25 * (gravable - descuentos), 0.4 * gravable)
 end;
 
+# ╔═╡ 74cfab4a-fd89-4075-b7b6-99bfea9c34d2
+md"## Cálculo
+
+Utilizando lo explicado anteriormente, podemos calcular la nómina del mes de acuerdo a los parámetros requeridos"
+
 # ╔═╡ 361a4751-abd5-4c77-b514-dd8a13ebb50a
 md"### Funciones auxiliares"
 
@@ -196,7 +201,10 @@ function seguridad_social(ibc)
 end;
 
 # ╔═╡ ef1ff529-7cfc-4086-8ad7-f5cfbecf7603
-function mes(sal, no_sal, exe, ded, d)
+"""
+Calcula la nómina del mes de acuerdo al salario, ingresos no salariales, rentas exentas, deducciones y días laborados.
+"""
+function mes(sal, no_sal, exe, ded, d = 30)
 	sm = sal*(d/30)
 	ss = seguridad_social(ibc(sm, no_sal))
 
@@ -444,6 +452,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─fda958ff-77b5-4849-ad02-84bbaa5badf2
 # ╠═7854379f-602d-43e5-b4f4-02357028b139
 # ╠═135a870d-655b-46c3-86f6-fbcc75e5267b
+# ╟─74cfab4a-fd89-4075-b7b6-99bfea9c34d2
 # ╠═ef1ff529-7cfc-4086-8ad7-f5cfbecf7603
 # ╟─361a4751-abd5-4c77-b514-dd8a13ebb50a
 # ╠═202de137-96d9-4a01-b830-ec09b39d25e1
