@@ -5,7 +5,6 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ 370aa199-8df2-416b-996f-236075ff911e
-# Dependencies
 using PlutoUI
 # TODO
 
@@ -16,6 +15,23 @@ md"
 Cálculo de los descuentos y deducciones de nómina aplicables a un salario en Colombia.
 
 El objetivo de esta herramienta es generar un resumen de ingresos y descuentos anual, que puede ser exportado en un formato amigable.
+"
+
+# ╔═╡ e33d94b5-77ea-4a99-8859-ec92fa3c0611
+md"## tl;dr
+
+Se pueden obtener las deducciones sobre un salario de así:
+
+```
+nomina_mes = mes(salario, no_sal, exento, deduccion, dias)
+```
+Donde:
+
+- `salario`: el salario base del trabajador
+- `no_sal`: el ingreso no salarial del trabajador
+- `exento`: posibles rentas exentas
+- `deduccion`: posibles deducciones a la base gravable
+- `dias`: número de días laborados en el mes (opcional)
 "
 
 # ╔═╡ 164c89b1-5284-401e-af21-103dade48b20
@@ -36,19 +52,6 @@ begin
 	deduccion   = 0
 	dias_labor  = 30
 end;
-
-# ╔═╡ ef5973cc-acad-4b0c-9311-8f5afc29fad6
-struct Nomina
-	salario::Int
-	no_salarial::Int
-	retefuente::Int
-	salud::Int
-	pensión::Int
-	solidaridad::Int
-	devengado::Int
-	descuento::Int
-	total::Int
-end
 
 # ╔═╡ 2f935690-654c-46ce-aa80-6503069e1a19
 md"## Seguridad social
@@ -129,6 +132,19 @@ end;
 md"## Cálculo
 
 Utilizando lo explicado anteriormente, podemos calcular la nómina del mes de acuerdo a los parámetros requeridos"
+
+# ╔═╡ ef5973cc-acad-4b0c-9311-8f5afc29fad6
+struct Nomina
+	salario::Int
+	no_salarial::Int
+	retefuente::Int
+	salud::Int
+	pensión::Int
+	solidaridad::Int
+	devengado::Int
+	descuento::Int
+	total::Int
+end
 
 # ╔═╡ 361a4751-abd5-4c77-b514-dd8a13ebb50a
 md"### Funciones auxiliares"
@@ -214,6 +230,9 @@ function mes(sal, no_sal, exe, ded, d = 30)
 
 	Nomina(sm, no_sal, rf, round.(ss)..., dev, des, dev - des)
 end;
+
+# ╔═╡ 1d85fd9a-264f-4366-84d3-6ca33ebb2177
+mes(5_000_000, 1_000_000, 0, 0)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -440,12 +459,13 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 """
 
 # ╔═╡ Cell order:
-# ╟─e7ba903c-2752-4832-b69a-c93de0dd47ac
 # ╠═370aa199-8df2-416b-996f-236075ff911e
+# ╟─e7ba903c-2752-4832-b69a-c93de0dd47ac
+# ╟─e33d94b5-77ea-4a99-8859-ec92fa3c0611
+# ╠═1d85fd9a-264f-4366-84d3-6ca33ebb2177
 # ╟─164c89b1-5284-401e-af21-103dade48b20
 # ╠═32e16538-5cf0-4e06-85d7-b7a72841e5e3
 # ╠═8e90c851-1aad-490b-b8f0-7ef60b15d111
-# ╠═ef5973cc-acad-4b0c-9311-8f5afc29fad6
 # ╟─2f935690-654c-46ce-aa80-6503069e1a19
 # ╠═482e1467-3d98-49dc-94f9-15b52a8d30a8
 # ╠═eee16024-c06c-4b79-9413-3542281079a2
@@ -453,6 +473,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═7854379f-602d-43e5-b4f4-02357028b139
 # ╠═135a870d-655b-46c3-86f6-fbcc75e5267b
 # ╟─74cfab4a-fd89-4075-b7b6-99bfea9c34d2
+# ╠═ef5973cc-acad-4b0c-9311-8f5afc29fad6
 # ╠═ef1ff529-7cfc-4086-8ad7-f5cfbecf7603
 # ╟─361a4751-abd5-4c77-b514-dd8a13ebb50a
 # ╠═202de137-96d9-4a01-b830-ec09b39d25e1
