@@ -35,22 +35,13 @@ Donde:
 "
 
 # ╔═╡ 164c89b1-5284-401e-af21-103dade48b20
-md"## Definiciones y Parámetros"
+md"## Definiciones"
 
 # ╔═╡ 32e16538-5cf0-4e06-85d7-b7a72841e5e3
 begin
 	# const UVT = 36_308 # 2021
 	const UVT = 38_004 # 2022
 	const SMMLV = 1_000_000
-end;
-
-# ╔═╡ 8e90c851-1aad-490b-b8f0-7ef60b15d111
-begin
-	salario     = 5_000_000
-	no_salarial = 1_000_000
-	exento      = 0
-	deduccion   = 0
-	dias_labor  = 30
 end;
 
 # ╔═╡ 2f935690-654c-46ce-aa80-6503069e1a19
@@ -465,7 +456,6 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═1d85fd9a-264f-4366-84d3-6ca33ebb2177
 # ╟─164c89b1-5284-401e-af21-103dade48b20
 # ╠═32e16538-5cf0-4e06-85d7-b7a72841e5e3
-# ╠═8e90c851-1aad-490b-b8f0-7ef60b15d111
 # ╟─2f935690-654c-46ce-aa80-6503069e1a19
 # ╠═482e1467-3d98-49dc-94f9-15b52a8d30a8
 # ╠═eee16024-c06c-4b79-9413-3542281079a2
