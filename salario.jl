@@ -189,8 +189,7 @@ function seguridad_social(ibc)
 	pension     = 0.04
 	solidaridad = solidaridad_pensional(ibc)
 
-	seguridad   = ibc.*[salud, pension, solidaridad]
-	(sum(seguridad), seguridad)
+	ibc.*[salud, pension, solidaridad]
 end;
 
 # ╔═╡ ef1ff529-7cfc-4086-8ad7-f5cfbecf7603
@@ -199,10 +198,10 @@ begin
 	ss = seguridad_social(ibc(sm, no_salarial))
 
 	dev = sm + no_salarial
-	rf = retencion_fuente(base_retencion(dev, ss[1], exento, deduccion), dias_labor)
-	des = rf + round(ss[1]) + deduccion
+	rf = retencion_fuente(base_retencion(dev, sum(ss), exento, deduccion), dias_labor)
+	des = rf + round.(sum(ss)) + deduccion
 
-	Nomina(sm, no_salarial, rf, round.(ss[2])..., dev, des, dev - des)
+	Nomina(sm, no_salarial, rf, round.(ss)..., dev, des, dev - des)
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
